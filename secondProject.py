@@ -1,3 +1,10 @@
+"""
+Universidade do Estado do Amazonas - Escola Superior de Tecnologia
+Alunos: Karla Félix, Lucas Lima, Victor Lopes
+Visão Computacional
+Segunda Atividade
+"""
+
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -25,11 +32,11 @@ def contours(image):
     return contoured
 
 def drawImageContours(image):
-    copyGrayImage = np.copy(image)
+    copyGrayImage = grayScale(image)
     contoured = contours(copyGrayImage)
-    cv2.drawContours(copyGrayImage, contoured, -1, (0, 0, 0), 2)
-    cv2.imwrite('contoured.png', copyGrayImage)
-    return copyGrayImage
+    cv2.drawContours(image, contoured, -1, (0, 255, 0), 2)
+    cv2.imwrite('contoured.png', image)
+    return image
 
 
 
@@ -40,13 +47,13 @@ def showResults(images):
     columns = 3
     for i in range(rows * columns):
         plt.subplot(rows, columns, i+1)
-        if(i != 0):
-            plt.imshow(images[i], cmap='gray')
+        if(i == 0 or i == 5):
+            plt.imshow(cv2.cvtColor(images[i], cv2.COLOR_BGR2RGB))
             plt.axis('off')
             plt.title(titles[i])
 
         else:
-            plt.imshow(cv2.cvtColor(images[i], cv2.COLOR_BGR2RGB))
+            plt.imshow(images[i], cmap='gray')
             plt.axis('off')
             plt.title(titles[i])
         
@@ -57,9 +64,10 @@ def showResults(images):
 def startAlgorithm():
     image = cv2.imread('pikeman.jpg')
     # image = image[::3, ::3] #diminui a imagem
+    copyOriginalImage = np.copy(image)
     grayImage = grayScale(image)  
-    showResults([image, grayImage, smoothing(grayImage), 
-    binarization(grayImage), cannyMethodEdges(grayImage), drawImageContours(grayImage)])
+    showResults([copyOriginalImage, grayImage, smoothing(grayImage), 
+    binarization(grayImage), cannyMethodEdges(grayImage), drawImageContours(image)])
     
 
 startAlgorithm()
