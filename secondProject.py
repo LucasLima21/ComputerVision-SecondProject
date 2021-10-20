@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 
 
 def grayScale(image): #converter para escala de cinza
@@ -33,21 +34,32 @@ def drawImageContours(image):
 
 
 def showResults(images):
+    figure = plt.figure(figsize=(12, 6))
+    titles = ['Original Image', 'Gray Scale', 'Gaussian Blur', "Binarization", "Canny", "Contours"]
+    rows = 2
+    columns = 3
+    for i in range(rows * columns):
+        plt.subplot(rows, columns, i+1)
+        if(i != 0):
+            plt.imshow(images[i], cmap='gray')
+            plt.axis('off')
+            plt.title(titles[i])
+
+        else:
+            plt.imshow(cv2.cvtColor(images[i], cv2.COLOR_BGR2RGB))
+            plt.axis('off')
+            plt.title(titles[i])
+        
+    figure.tight_layout(pad=0.2)
+    plt.show()
     
-    result = np.vstack([np.hstack([images[0], images[1], images[2]]), np.hstack([images[3], images[4], images[5]])])
-    # result = np.concatenate((images[0], images[1]), axis=0)
-    cv2.imshow('Resultados', result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
 def startAlgorithm():
     image = cv2.imread('pikeman.jpg')
-    image = image[::3, ::3] #diminui a imagem
+    # image = image[::3, ::3] #diminui a imagem
     grayImage = grayScale(image)  
-    
-    showResults([grayImage, grayImage, smoothing(grayImage), 
+    showResults([image, grayImage, smoothing(grayImage), 
     binarization(grayImage), cannyMethodEdges(grayImage), drawImageContours(grayImage)])
     
-
 
 startAlgorithm()
